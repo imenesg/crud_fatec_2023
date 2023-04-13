@@ -17,6 +17,8 @@
       <div class="container">
         <button @click="goToCadastroAlunos">Cadastro de Alunos</button>
         <button @click="goToBuscaAlunos">Busca de Alunos</button>
+        <button @click="goToCadastroProfessores">Cadastro de Professores</button>
+        <button @click="goToBuscaProfessores">Busca de Professores</button>
       </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
@@ -27,11 +29,21 @@
   new Vue({
     el: "main",
     methods: {
+      //Leva o usuario até cadastroAlunos.html
       goToCadastroAlunos() {
         window.open("cadastroAlunos.html", "_blank");
       },
+       //Leva o usuario até buscaAlunos.html
       goToBuscaAlunos() {
         window.open("buscaAlunos.html", "_blank");
+      },
+       //Leva o usuario até cadastroAlunos.html
+       goToCadastroProfessores() {
+        window.open("cadastroProfessores.html", "_blank");
+      },
+       //Leva o usuario até buscaAlunos.html
+       goToBuscaProfessores() {
+        window.open("buscaProfessores.html", "_blank");
       },
     },
   });

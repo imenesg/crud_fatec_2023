@@ -41,7 +41,7 @@
       <div class="panel-heading">
         <div class="row">
           <div class="col-md-6">
-            <h3 class="panel-title">Alunos</h3>
+            <h3 class="panel-title">Professores</h3>
           </div>
           <div class="col-md-6" align="right">
             <input type="button" class="btn btn-success btn-xs" @click="openModel" value="Add" />
@@ -53,13 +53,17 @@
           <table class="table table-bordered table-striped">
             <tr>
               <th>Nome</th>
-              <th>Sobrenome</th>
+              <th>Endereço</th>
+              <th>curso</th>
+              <th>salario</th>
               <th>Editar</th>
               <th>Deletar</th>
             </tr>
             <tr v-for="row in allData">
-              <td>{{ row.first_name }}</td>
-              <td>{{ row.last_name }}</td>
+              <td>{{ row.nome }}</td>
+              <td>{{ row.endereco }}</td>
+              <td>{{ row.curso }}</td>
+              <td>{{ row.salario }}</td>
               <td>
                 <button type="button" name="edit" class="btn btn-primary btn-xs edit" @click="fetchData(row.id)">
                   Editar
@@ -93,8 +97,16 @@
                     <input type="text" class="form-control" v-model="first_name" />
                   </div>
                   <div class="form-group">
-                    <label>Sobrenome</label>
-                    <input type="text" class="form-control" v-model="last_name" />
+                    <label>Endereço</label>
+                    <input type="text" class="form-control" v-model="endereco" />
+                  </div>
+                  <div class="form-group">
+                    <label>Curso</label>
+                    <input type="text" class="form-control" v-model="curso" />
+                  </div>
+                  <div class="form-group">
+                    <label>salario</label>
+                    <input type="text" class="form-control" v-model="salario" />
                   </div>
                   <br />
                   <div align="center">
@@ -123,14 +135,14 @@ var application = new Vue({
     allData: "", // Armazena todos os dados do banco de dados
     myModel: false, // Define se o modal de adicionar/editar aluno deve ser exibido ou não
     actionButton: "Insert", // Define o texto do botão de ação (Inserir/Atualizar)
-    dynamicTitle: "Adicionar Aluno", // Define o título do modal (Adicionar Aluno/Editar Dados)
+    dynamicTitle: "Adicionar Professor", // Define o título do modal (Adicionar Aluno/Editar Dados)
   },
   // Define os métodos que serão usados em todo o aplicativo
   methods: {
     // Busca todos os dados do banco de dados
     fetchAllData: function () {
       axios
-        .post("cadastro.php", {
+        .post("cadastroProfessor.php", {
           action: "fetchall",
         })
         .then(function (response) {
@@ -140,45 +152,55 @@ var application = new Vue({
     // Abre o modal de adicionar aluno
     openModel: function () {
       application.first_name = "";
-      application.last_name = "";
+      application.endereco = "";
+      application.curso = "";
+      application.salario = "";
       application.actionButton = "Insert";
-      application.dynamicTitle = "Adicionar Aluno";
+      application.dynamicTitle = "Adicionar Professor";
       application.myModel = true;
     },
     // Envia os dados do formulário de adicionar/editar aluno para o banco de dados
     submitData: function () {
       // Verifica se o primeiro nome e o último nome foram preenchidos
-      if (application.first_name != "" && application.last_name != "") {
+      if (application.first_name != "") {
         // Se a ação for "Inserir"
         if (application.actionButton == "Insert") {
           axios
-            .post("cadastro.php", {
+            .post("cadastroProfessor.php", {
               action: "insert",
               firstName: application.first_name,
-              lastName: application.last_name,
+              endereco: application.endereco,
+              curso: application.curso,
+              salario: application.salario,
             })
             .then(function (response) {
               application.myModel = false;
               application.fetchAllData();
               application.first_name = "";
-              application.last_name = "";
+              application.endereco = "";
+              application.curso = "";
+              application.salario = "";
               alert(response.data.message);
             });
         }
         // Se a ação for "Atualizar"
         if (application.actionButton == "Update") {
           axios
-            .post("cadastro.php", {
+            .post("cadastroProfessor.php", {
               action: "update",
               firstName: application.first_name,
-              lastName: application.last_name,
+              endereco: application.endereco,
+              curso: application.curso,
+              salario: application.salario,
               hiddenId: application.hiddenId,
             })
             .then(function (response) {
               application.myModel = false;
               application.fetchAllData();
               application.first_name = "";
-              application.last_name = "";
+              application.endereco = "";
+              application.curso = "";
+              application.salario = "";
               application.hiddenId = "";
               alert(response.data.message);
             });
@@ -190,13 +212,15 @@ var application = new Vue({
     // Busca um único aluno do banco de dados
     fetchData: function (id) {
       axios
-        .post("cadastro.php", {
+        .post("cadastroProfessor.php", {
           action: "fetchSingle",
           id: id,
         })
         .then(function (response) {
-          application.first_name = response.data.first_name;
-          application.last_name = response.data.last_name;
+          application.first_name = response.data.nome;
+          application.endereco = response.data.endereco;
+          application.curso = response.data.curso; 
+          application.salario = response.data.salario;
           application.hiddenId = response.data.id;
           application.myModel = true;
           application.actionButton = "Update";
@@ -205,9 +229,9 @@ var application = new Vue({
     },
     // Deleta um aluno do banco de dados
       deleteData: function (id) {
-        if (confirm("Você tem certeza que deseja deletar esse aluno?")) {
+        if (confirm("Você tem certeza que deseja deletar esse professor?")) {
           axios
-            .post("cadastro.php", {
+            .post("cadastroProfessor.php", {
               action: "delete",
               id: id,
             })

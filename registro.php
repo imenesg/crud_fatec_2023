@@ -43,5 +43,4 @@ UNIQUE KEY email (email)
 );
 */
 
-
 ?>

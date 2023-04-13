@@ -14,7 +14,7 @@ $data = array();
 // Verifica qual é a ação solicitada
 if ($received_data->action == 'fetchall') {
     // Se a ação for "fetchall", faz uma consulta para recuperar todos os registros da tabela "fatec_alunos", ordenados pelo ID em ordem decrescente
-    $query = "SELECT * FROM fatec_alunos ORDER BY id DESC";
+    $query = "SELECT * FROM fatec_Professores ORDER BY salario DESC";
     $statement = $connect->prepare($query);
     $statement->execute();
 
@@ -28,13 +28,15 @@ if ($received_data->action == 'fetchall') {
 }
 
 if ($received_data->action == 'insert') {
-    // Se a ação for "insert", cria um novo registro na tabela "fatec_alunos" com os dados recebidos
+    // Se a ação for "insert", cria um novo registro na tabela "fatec_professores" com os dados recebidos
     $data = array(
-        ':first_name' => $received_data->firstName,
-        ':last_name' => $received_data->lastName
+        ':nome' => $received_data->firstName,
+        ':endereco' => $received_data->endereco,
+        ':curso' => $received_data->curso,
+        ':salario' => $received_data->salario
     );
 
-    $query = "INSERT INTO fatec_alunos (first_name, last_name) VALUES (:first_name, :last_name)";
+    $query = "INSERT INTO fatec_Professores (nome, endereco, curso, salario  ) VALUES (:nome, :endereco, :curso, :salario)";
 
     $statement = $connect->prepare($query);
 
@@ -43,7 +45,7 @@ if ($received_data->action == 'insert') {
 
     // Cria um array com a mensagem a ser enviada como resposta
     $output = array(
-        'message' => 'Aluno Adicionado'
+        'message' => 'Professor Adicionado'
     );
 
     // Codifica o array $output como JSON e o envia como resposta
@@ -52,7 +54,7 @@ if ($received_data->action == 'insert') {
 
 if ($received_data->action == 'fetchSingle') {
     // Se a ação for "fetchSingle", busca um único registro da tabela "fatec_alunos" com o ID recebido
-    $query = "SELECT * FROM fatec_alunos WHERE id = '" . $received_data->id . "'";
+    $query = "SELECT * FROM fatec_Professores WHERE id = '" . $received_data->id . "'";
     $statement = $connect->prepare($query);
     $statement->execute();
 
@@ -60,8 +62,10 @@ if ($received_data->action == 'fetchSingle') {
     $result = $statement->fetchAll();
     foreach ($result as $row) {
         $data['id'] = $row['id'];
-        $data['first_name'] = $row['first_name'];
-        $data['last_name'] = $row['last_name'];
+        $data['nome'] = $row['nome'];
+        $data['endereco'] = $row['endereco'];
+        $data['curso'] = $row['curso'];
+        $data['salario'] = $row['salario'];
     }
 
     // Codifica o array $data como JSON e o envia como resposta
@@ -72,18 +76,15 @@ if ($received_data->action == 'update') {
 
     // Cria um array com os dados a serem atualizados no aluno
     $data = array(
-        ':first_name' => $received_data->firstName, // Define o primeiro nome do aluno
-        ':last_name' => $received_data->lastName, // Define o sobrenome do aluno
-        ':id' => $received_data->hiddenId // Define o ID do aluno a ser atualizado
+        ':nome' => $received_data->nome, // Define o primeiro nome do professor
+        ':endereco' => $received_data->endereco, 
+        ':curso' => $received_data->curso, 
+        ':salario' => $received_data->salario,
+        ':id' => $received_data->hiddenId 
     );
 
     // Define a consulta SQL para atualizar os dados do aluno
-    $query = "
-        UPDATE fatec_alunos 
-        SET first_name = :first_name, 
-            last_name = :last_name 
-        WHERE id = :id
-    ";
+    $query = "UPDATE fatec_Professores SET nome = :nome, endereco = :endereco, curso = :curso, salario = :salario, WHERE id = :id";
 
     // Prepara a consulta para ser executada, substituindo os placeholders pelos valores do array $data
     $statement = $connect->prepare($query);
@@ -93,7 +94,7 @@ if ($received_data->action == 'update') {
 
     // Cria um array de resposta com a mensagem de sucesso
     $output = array(
-        'message' => 'Aluno Atualizado'
+        'message' => 'Professor Atualizado'
     );
 
     // Converte o array de resposta para formato JSON e o envia para o cliente
@@ -104,10 +105,7 @@ if ($received_data->action == 'update') {
 if ($received_data->action == 'delete') {
 
     // Define a consulta SQL para deletar o aluno com o ID recebido
-    $query = "
-        DELETE FROM fatec_alunos 
-        WHERE id = '" . $received_data->id . "'
-    ";
+    $query = "DELETE FROM fatec_Professores WHERE id = '". $received_data->id ."'";
 
     // Prepara a consulta para ser executada
     $statement = $connect->prepare($query);
@@ -117,7 +115,7 @@ if ($received_data->action == 'delete') {
 
     // Cria um array de resposta com a mensagem de sucesso
     $output = array(
-        'message' => 'Aluno Deletado'
+        'message' => 'Professor Deletado'
     );
 
     // Converte o array de resposta para formato JSON e o envia para o cliente

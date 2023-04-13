@@ -10,18 +10,11 @@ $data = array(); // Cria um array vazio para armazenar os dados recuperados do b
 
 if($received_data->query != '') // Verifica se a consulta possui dados
 {
-	$query = "
-	SELECT * FROM fatec_alunos
-	WHERE first_name LIKE '%".$received_data->query."%'
-	OR last_name LIKE '%".$received_data->query."%'
-	ORDER BY id DESC
-	";
-	// Filtra os resultados pelo primeiro nome // Seleciona todos os dados da tabela fatec_alunos // Ordena os resultados pelo ID em ordem decrescente
+	$query = "SELECT * FROM fatec_Professores WHERE nome LIKE '%".$received_data->query."%' OR curso LIKE '%".$received_data->query."%' ORDER BY salario DESC";
 }
 else
 {
-	$query = "SELECT * FROM fatec_alunos ORDER BY id DESC
-	";
+	$query = "SELECT * FROM fatec_Professores ORDER BY salario DESC";
 }
 
 $statement = $connect->prepare($query); // Prepara a consulta SQL

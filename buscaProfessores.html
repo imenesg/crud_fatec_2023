@@ -23,7 +23,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-md-9">
-                        <h3 class="panel-title">Busca Alunos</h3>
+                        <h3 class="panel-title">Busca Professores</h3>
                     </div>
                     <div class="col-md-3" align="right">
                         <input type="text" class="form-control input-sm" placeholder="Search Data" v-model="query"
@@ -35,14 +35,18 @@
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped">
                         <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
+                            <th>Nome</th>
+                            <th>Endereço</th>
+                            <th>Curso</th>
+                            <th>Salario</th>
                         </tr>
-                        <tr v-for="row in allData">//faz um for e mostra esssa parte para todos elmentes em alldata
-                            <td>{{ row.first_name }}</td>//pega o primero nome
-                            <td>{{ row.last_name }}</td>//pega o segundo nome
+                        <tr v-for="row in allData">
+                            <td>{{ row.nome }}</td>
+                            <td>{{ row.endereco }}</td>
+                            <td>{{ row.curso }}</td>
+                            <td>{{ row.salario }}</td>
                         </tr>
-                        <tr v-if="nodata">//se notdata for verdadeiro o campo ira aparecer
+                        <tr v-if="nodata">
                             <td colspan="2" align="center">No Data Found</td>
                         </tr>
                     </table>
@@ -64,7 +68,7 @@
     },
     methods: {
         fetchData: function () { // Define o método 'fetchData' para buscar dados de pesquisa
-            axios.post('busca.php', { // Faz uma solicitação POST para 'busca.php'
+            axios.post('buscaProfessores.php', { // Faz uma solicitação POST para 'busca.php'
                 query: this.query // Envia a consulta de pesquisa atual como um parâmetro
             }).then(function (response) { // Manipula a resposta da solicitação
                 if (response.data.length > 0) { // Se houver dados de pesquisa disponíveis
